@@ -1,7 +1,9 @@
 import numpy as np
+from algorithm.decorator import execution_timer
 
 
-def hits(adj_matrix, precision = 0.001):
+@execution_timer
+def hits(adj_matrix, precision=0.001):
     # init
     node_len = adj_matrix.shape[0]
 
@@ -11,15 +13,15 @@ def hits(adj_matrix, precision = 0.001):
     new_authorities = np.zeros(node_len)
     new_hubs = np.zeros(node_len)
 
-    counter = 0
     while 1:
         counter+=1
         for i in range(node_len):
-            # points to it
             for j in range(node_len):
+                # points to it
                 if adj_matrix[:, i][j]:
                     new_authorities[i] += old_hubs[j]
 
+                # it points to
                 if adj_matrix[i][j]:
                     new_hubs[i] += old_authorities[j]
 
@@ -29,6 +31,7 @@ def hits(adj_matrix, precision = 0.001):
         new_authorities = new_authorities / auth_sum
         new_hubs = new_hubs / hub_sum
 
+        # check for convergence, if not, continue doing
         if (
             (np.absolute(new_authorities - old_authorities) < precision).all()
             and

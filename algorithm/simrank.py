@@ -1,4 +1,5 @@
 import numpy as np
+from algorithm.decorator import execution_timer
 
 
 def get_parents(node, adj_matrix):
@@ -22,6 +23,7 @@ def simrank(nodes, adj_matrix, C=0.5, level=1):
         return (C / (len(nodes_parents[0]) * len(nodes_parents[1]))) * total
 
 
+@execution_timer
 def get_simrank_matrix(n, adj_matrix):
     simrank_matrix = np.zeros(adj_matrix.shape)
     for i in range(n):

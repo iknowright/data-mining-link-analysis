@@ -31,7 +31,7 @@ TBA
 
 ### Analysis
 
-Analysis on this project may refer notebook (TBA)
+Analysis on this project may refer [this](https://nbviewer.jupyter.org/github/iknowright/data-mining-link-analysis/blob/master/report.ipynb) notebook
 
 ### Contributors
 * Chai-Shi, Chang

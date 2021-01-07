@@ -9,16 +9,31 @@ graph_6.txt: 1228 nodes, 5220 edges
 
 import numpy as np
 
-# from page_rank import pagerank
-from pagerank import pagerank
-from hits import hits
-from simrank import get_simrank_matrix
+from algorithm.pagerank import pagerank
+from algorithm.hits import hits
+from algorithm.simrank import get_simrank_matrix
+
+
+def execution_timer(func):
+    """
+    timer for execution
+    """
+
+    def wrapper(*args):
+        start = time.time()
+        func_ret = func(*args)
+        elapsed = time.time() - start
+        print(f'{func.__name__}:time {elapsed} elapsed second(s)')
+        return func_ret
+    return wrapper
 
 
 if __name__ == "__main__":
     node_lengths = [6, 5, 4, 7, 469, 1228]
 
-    for i in range(5):
+    for i in range(6):
+        print(f"GRAPH {i+1}")
+
         # create numpy matrix
         matrix = np.zeros(tuple([node_lengths[i]] * 2))
 
@@ -41,3 +56,5 @@ if __name__ == "__main__":
         if i <= 3:
             simrank = get_simrank_matrix(node_lengths[i], matrix)
             np.savetxt(f"output/graph_{i + 1}_SimRank.txt", simrank, newline="\n", delimiter=" ", fmt="%.8g")
+
+        print("\n")
