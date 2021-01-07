@@ -3,9 +3,9 @@ Analysis of 4 major link-analysis algorithm including implementation and visuali
 
 ## Features
 Algorithms used in this project
-* PageRank
-* HITS
-* SimRank
+* [PageRank](https://zh.wikipedia.org/wiki/PageRank)
+* [HITS](https://en.wikipedia.org/wiki/HITS_algorithm)
+* [SimRank](https://zh.wikipedia.org/wiki/SimRank)
 
 ## Getting Started
 
@@ -26,8 +26,24 @@ pipenv install
 ```
 
 ### Calculating on your graph
+```=bash
+python main.py --help
+usage: main.py [-h] --algorithm ALGORITHM --data DATA --node-length
+               NODE_LENGTH [--damping-factor DAMPING_FACTOR]
+               [--decay-factor DECAY_FACTOR]
 
-TBA
+optional arguments:
+  -h, --help            show this help message and exit
+  --algorithm ALGORITHM
+                        link-analysis algorithm [PageRank, HITS, SimRank]
+  --data DATA           digraph data file
+  --node-length NODE_LENGTH
+                        node length
+  --damping-factor DAMPING_FACTOR
+                        damping factor for PageRank
+  --decay-factor DECAY_FACTOR
+                        decay factor for SimRank
+```
 
 ### Analysis
 

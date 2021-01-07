@@ -14,7 +14,6 @@ def hits(adj_matrix, precision=0.001):
     new_hubs = np.zeros(node_len)
 
     while 1:
-        counter+=1
         for i in range(node_len):
             for j in range(node_len):
                 # points to it
