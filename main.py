@@ -8,36 +8,52 @@ graph_6.txt: 1228 nodes, 5220 edges
 """
 
 import numpy as np
+import argparse
 
 # from page_rank import pagerank
-from pagerank import pagerank
-from hits import hits
-from simrank import get_simrank_matrix
+from algorithm.pagerank import pagerank
+from algorithm.hits import hits
+from algorithm.simrank import get_simrank_matrix
 
 
 if __name__ == "__main__":
-    node_lengths = [6, 5, 4, 7, 469, 1228]
+    # create argument for weka
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--algorithm", help="link-analysis algorithm [PageRank, HITS, SimRank]", required=True)
+    ap.add_argument("--data", help="digraph data file", required=True)
+    ap.add_argument("--node-length", help="node length", required=True)
+    ap.add_argument("--damping-factor", help="damping factor for PageRank")
+    ap.add_argument("--decay-factor", help="decay factor for SimRank")
+    args = vars(ap.parse_args())
 
-    for i in range(5):
-        # create numpy matrix
-        matrix = np.zeros(tuple([node_lengths[i]] * 2))
-
-        with open(f"data/graph_{i + 1}.txt", "r") as file_in:
+    matrix = np.zeros(tuple([int(args["node_length"])] * 2))
+    try:
+        with open(args["data"], "r") as file_in:
             lines = file_in.readlines()
             for line in lines:
                 items = line.strip().split(",")
                 matrix[int(items[0]) - 1][int(items[1]) - 1] = 1
+    except Exception as error:
+        print(error)
 
-        # doing PageRank
-        rank = pagerank(matrix)
-        np.savetxt(f"output/graph_{i + 1}_PageRank.txt", rank, newline=" ", fmt="%.8g")
-
-        # doing HITS
+    # Determine algorithm
+    if args["algorithm"] == "PageRank":
+        if args.get("damping_factor"):
+            rank = pagerank(matrix, int(args["damping_factor"]))
+        else:
+            rank = pagerank(matrix)
+        print("PageRank:")
+        print(rank)
+    elif args["algorithm"] == "HITS":
         authorities, hubs = hits(matrix)
-        np.savetxt(f"output/graph_{i + 1}_HITS_authority.txt", authorities, newline=" ", fmt="%.8g")
-        np.savetxt(f"output/graph_{i + 1}_HITS_hub.txt", hubs, newline=" ", fmt="%.8g")
-
-        # doing SimRank on graph 1, 2, 3, 4 only
-        if i <= 3:
-            simrank = get_simrank_matrix(node_lengths[i], matrix)
-            np.savetxt(f"output/graph_{i + 1}_SimRank.txt", simrank, newline="\n", delimiter=" ", fmt="%.8g")
+        print("Authorities:")
+        print(authorities)
+        print("Hubs:")
+        print(hubs)
+    elif args["algorithm"] == "SimRank":
+        if args.get("decay-factor"):
+            simrank = get_simrank_matrix(int(args["node_length"]), matrix, C=int(args["decay_factor"]))
+        else:
+            simrank = get_simrank_matrix(int(args["node_length"]), matrix)
+        print("SimRank:")
+        print(simrank)
